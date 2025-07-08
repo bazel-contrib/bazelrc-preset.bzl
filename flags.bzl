@@ -208,6 +208,14 @@ FLAGS = {
         On CI, upload locally executed action results to the remote cache.
         """,
     ),
+    "repo_env": struct(
+        default = "JAVA_HOME=../bazel_tools/jdk",
+        description = """\
+        Repository rules, such as rules_jvm_external: put Bazel's JDK on the path.
+        Avoids non-hermeticity from dependency on a JAVA_HOME pointing at a system JDK
+        see https://github.com/bazelbuild/rules_jvm_external/issues/445
+        """,
+    ),
     "reuse_sandbox_directories": struct(
         default = True,
         description = """\
