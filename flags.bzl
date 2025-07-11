@@ -189,11 +189,19 @@ FLAGS = {
         This flag was flipped for Bazel 8.
         """,
     ),
-    "remote_download_toplevel": struct(
+    "remote_download_outputs": struct(
         command = "common:ci",
-        default = True,
+        default = "minimal",
         description = """\
-        On CI, only download remote outputs of top level targets to the local machine.
+        On CI, don't download remote outputs to the local machine.
+        Most CI pipelines don't need to access the files and they can remain at rest on the remote cache.
+        Significant time can be spent on needless downloads, which is especially noticeable on fully-cached builds.
+
+        If you do need to download files, the fastest options are:
+        - Use the Remote Output Service (https://blog.bazel.build/2024/07/23/remote-output-service.html)
+          to lazy-materialize specific files
+        - Perform a second bazel command with specific targets and override this flag with the `toplevel` value.
+        - To copy executable targets, you can use `bazel run --run_under=cp //some:binary_target <destination path>`.
         """,
     ),
     "remote_local_fallback": struct(
