@@ -191,6 +191,7 @@ FLAGS = {
     ),
     "remote_download_outputs": struct(
         command = "common:ci",
+        if_bazel_version = ge("7.0.0rc1"),
         default = "minimal",
         description = """\
         On CI, don't download remote outputs to the local machine.
