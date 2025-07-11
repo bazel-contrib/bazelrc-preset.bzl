@@ -191,6 +191,7 @@ FLAGS = {
     ),
     "remote_download_toplevel": struct(
         command = "common:ci",
+        if_bazel_version = ge("7.0.0rc1"),
         default = True,
         description = """\
         On CI, only download remote outputs of top level targets to the local machine.
