@@ -3,7 +3,7 @@
 load("@aspect_bazel_lib//lib:write_source_files.bzl", "write_source_file")
 load("@bazel_features_version//:version.bzl", "version")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
-load("//:flags.bzl", "FLAGS")
+load("//:flags.bzl", "FLAGS", "MIGRATIONS")
 load("//private:util.bzl", "lt")
 
 def _strip(s):
@@ -57,7 +57,8 @@ def _generate_preset(ctx):
     ], format_each = "# %s")
     content.add("")
 
-    for flag, meta in FLAGS.items():
+    flags = FLAGS | (MIGRATIONS if ctx.attr.strict else {})
+    for flag, meta in flags.items():
         # Syntax sugar: allow a struct to stand in for a singleton list
         if type(meta) != type([]):
             meta = [meta]
@@ -78,22 +79,33 @@ def _generate_preset(ctx):
 
 generate_preset = rule(
     implementation = _generate_preset,
-    attrs = {"out": attr.output()},
+    attrs = {
+        "out": attr.output(),
+        "strict": attr.bool(
+            default = False,
+            doc = """\
+            Whether to generate a strict preset, which includes all flags that are marked as "strict" in the registry.
+            Unlike the "strict" flag in bazelisk, this applies flags being flipped in the upcoming major release.
+            """,
+        ),
+    },
 )
 
-def bazelrc_preset(name, out_file = None):
+def bazelrc_preset(name, out_file = None, **kwargs):
     """
     Creates a bazelrc preset file.
 
     Args:
         name: The name of the preset.
         out_file: The file to write the preset to. If not provided, the preset will be written to `{name}.bazelrc`.
+        **kwargs: additional named parameters to generate_preset
     """
     if lt("6.0.0"):
         fail("bazelrc_preset requires Bazel 6 or later. You are running Bazel {}".format(version))
     generate_preset(
         name = name,
         out = "_{}.bazelrc".format(name),
+        **kwargs
     )
     if not out_file:
         out_file = "{}.bazelrc".format(name)
