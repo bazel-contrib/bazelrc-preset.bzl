@@ -57,7 +57,7 @@ def _generate_preset(ctx):
     ], format_each = "# %s")
     content.add("")
 
-    flags = FLAGS | (MIGRATIONS if ctx.attr.migration else {})
+    flags = FLAGS | (MIGRATIONS if ctx.attr.strict else {})
     for flag, meta in flags.items():
         # Syntax sugar: allow a struct to stand in for a singleton list
         if type(meta) != type([]):
@@ -80,8 +80,8 @@ def _generate_preset(ctx):
 generate_preset = rule(
     implementation = _generate_preset,
     attrs = {
-        "migration": attr.bool(default = False),
         "out": attr.output(),
+        "strict": attr.bool(default = False),
     },
 )
 
