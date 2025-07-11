@@ -81,7 +81,13 @@ generate_preset = rule(
     implementation = _generate_preset,
     attrs = {
         "out": attr.output(),
-        "strict": attr.bool(default = False),
+        "strict": attr.bool(
+            default = False,
+            doc = """\
+            Whether to generate a strict preset, which includes all flags that are marked as "strict" in the registry.
+            Unlike the "strict" flag in bazelisk, this applies flags being flipped in the upcoming major release.
+            """,
+        ),
     },
 )
 
