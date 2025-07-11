@@ -14,17 +14,26 @@ jobs:
           - "6.x"
           - "7.x"
           - "8.x"
+        migration:
+          - false
+        include:
+          - bazel_version: 8.x
+            migration: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # get enough history to include the base commit
+      - name: Opt-in to migration flags
+        if: matrix.migration
+        run: |
+          sed -i 's/migration = False/migration = True/' tests/BUILD
       - name: Current output
         id: new
         run: |
           bazel build tests:preset
           cat bazel-bin/tests/preset.bazelrc | tee /tmp/new
-          git restore MODULE.bazel.lock
+          git restore MODULE.bazel.lock tests/BUILD
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
       - name: Prior output
@@ -38,7 +47,7 @@ jobs:
       - name: Show diff
         id: diff
         run: |
-          echo "🔍 Diff for Bazel ${{ matrix.bazel_version }}" > /tmp/diff
+          echo "🔍 Diff for Bazel ${{ matrix.bazel_version }} (migration: ${{ matrix.migration }})" > /tmp/diff
           echo '```diff' >> /tmp/diff
           if ! diff /tmp/old /tmp/new >> /tmp/diff; then
             echo "different=true" >> "$GITHUB_OUTPUT"
