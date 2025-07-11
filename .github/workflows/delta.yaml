@@ -60,4 +60,4 @@ jobs:
           message:
           file-path: ${{ steps.diff.outputs.diff }}
           # Update existing comment on new PR snapshot
-          comment-tag: ${{ matrix.bazel_version }}
+          comment-tag: ${{ matrix.bazel_version }}-${{ matrix.strict }}
