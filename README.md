@@ -24,6 +24,7 @@ load("@bazelrc-preset.bzl", "bazelrc_preset")
 
 bazelrc_preset(
     name = "preset",
+    strict = True, # Enable this to opt-in to flags that are flipped in the upcoming major release
 )
 ```
 
@@ -60,6 +61,18 @@ try-import %workspace%/user.bazelrc
 5. Some flags are enabled only under a given config.
    For example, many flags apply only when running on CI.
    Configure your CI system to always pass `--config=ci` when running Bazel (for example, put it in the system bazelrc on CI runner machines).
+
+## Migrating to stricter flags
+
+Bazel major releases include flag-flips.
+
+Bazelisk provides [extra command-line options](https://github.com/bazelbuild/bazelisk?tab=readme-ov-file#other-features) to migrate to stricter flags. A common migration pattern is:
+
+1. Run `bazelisk --migrate build --nobuild //...` to try upgrading new strict flags.
+2. For flags that don't work, either
+  - disable them by explicitly setting the value in your .bazelrc
+  - fix the issues they report
+3. Turn on `strict=True` on the `bazelrc_preset` rule. This is a superset of running `bazelisk --strict build ...`
 
 ## References and Credits
 
