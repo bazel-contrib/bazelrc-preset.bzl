@@ -199,8 +199,9 @@ FLAGS = {
         Significant time can be spent on needless downloads, which is especially noticeable on fully-cached builds.
 
         If you do need to download files, the fastest options are:
+        - (preferred) Use `remote_download_regex` to specify the files to download.
         - Use the Remote Output Service (https://blog.bazel.build/2024/07/23/remote-output-service.html)
-          to lazy-materialize specific files
+          to lazy-materialize specific files after the build completes.
         - Perform a second bazel command with specific targets and override this flag with the `toplevel` value.
         - To copy executable targets, you can use `bazel run --run_under=cp //some:binary_target <destination path>`.
         """,
