@@ -1,6 +1,6 @@
 "Database of Bazel flags which apply across every Bazel use-case"
 
-load("//private:util.bzl", "ge", "lt")
+load("//private:util.bzl", "ge", "ge_same_major", "lt")
 
 # buildifier: keep-sorted
 FLAGS = {
@@ -317,6 +317,90 @@ FLAGS = {
         description = """\
         Prevent long running tests from timing out.
         Set to a high value to allow tests to complete even if they take longer than expected.
+        """,
+    ),
+}
+
+# Flags being flipped in the next Major release
+# Based on https://github.com/bazelbuild/bazel/issues?q=is%3Aissue%20state%3Aopen%20label%3Amigration-ready
+# buildifier: keep-sorted
+MIGRATIONS = {
+    "incompatible_auto_exec_groups": struct(
+        default = True,
+        if_bazel_version = ge_same_major("8.0.0"),
+        description = """\
+        Automatic execution groups select an execution platform for each toolchain type.
+        In other words, one target can have multiple execution platforms without defining execution groups.
+        Migration requires setting a toolchain parameter inside ctx.actions.{run, run_shell} for actions which use tool or executable from a toolchain.
+
+        See https://github.com/bazelbuild/bazel/issues/17134
+        """,
+    ),
+    "incompatible_autoload_externally": struct(
+        default = True,
+        if_bazel_version = ge_same_major("8.0.0"),
+        description = """\
+        Language specific rules (Protos, Java, C++, Android) are being rewritten to Starlark and moved from Bazel into their rules repositories
+        (protobuf, rules_java, rules_cc, rules_android, apple_support).
+        Because of the move the rules need to be loaded from their repositories.
+        This requires adding load statements to all bzl and BUILD files that are using those rules.
+
+        See https://github.com/bazelbuild/bazel/issues/23043
+        """,
+    ),
+    "incompatible_config_setting_private_default_visibility": struct(
+        default = True,
+        if_bazel_version = ge_same_major("8.0.0"),
+        description = """\
+        Visibility on config_setting isn't historically enforced. This is purely for legacy reasons.
+        There's no philosophical reason to distinguish them.
+        Treat all config_settings as if they follow standard visibility logic at https://docs.bazel.build/versions/master/visibility.html:
+        have them set visibility explicitly if they'll be used anywhere outside their own package.
+
+        See https://github.com/bazelbuild/bazel/issues/12933
+        """,
+    ),
+    "incompatible_disable_native_repo_rules": struct(
+        default = True,
+        if_bazel_version = ge_same_major("8.0.0"),
+        description = """\
+        When set to `true`, native repo rules cannot be used in WORKSPACE; their Starlark counterparts must be used. Native repo rules already can't be used in Bzlmod.
+
+        See https://github.com/bazelbuild/bazel/issues/22080
+        """,
+    ),
+    "incompatible_disable_non_executable_java_binary": struct(
+        default = True,
+        if_bazel_version = ge_same_major("8.0.0"),
+        description = """\
+        Removes create_executable attribute from java_binary.
+        Migration to java_single_jar is needed.
+
+        See https://github.com/bazelbuild/bazel/issues/19687
+        """,
+    ),
+    "incompatible_disable_starlark_host_transitions": struct(
+        default = True,
+        if_bazel_version = ge_same_major("8.0.0"),
+        description = """\
+        Changes this syntax to be illegal: cfg = "host"
+        Instead use: cfg = "exec"
+
+        See https://github.com/bazelbuild/bazel/issues/17032
+        """,
+    ),
+    "incompatible_repo_env_ignores_action_env": struct(
+        default = True,
+        if_bazel_version = ge_same_major("8.0.0"),
+        description = """\
+        Address a counterintuitive interaction with --action_env and it's affect on repository environments.
+
+        Note that this will implicitly affect other features which inherit the repository environment such as:
+        - Credential managers
+        - Download manager
+        - And possibly more.
+
+        See https://github.com/bazelbuild/bazel/issues/26222
         """,
     ),
 }
