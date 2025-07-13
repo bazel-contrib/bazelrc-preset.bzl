@@ -6,8 +6,11 @@ load("@bazel_skylib//lib:new_sets.bzl", "sets")
 load("//:flags.bzl", "FLAGS", "MIGRATIONS")
 load("//private:util.bzl", "lt")
 
-def _strip(s):
-    return s.strip()
+def _format_comment_line(s):
+    s = s.strip()
+    if s:
+        return "# " + s
+    return "#"  # Avoid trailing whitespace
 
 def _format_flag(flag, meta):
     command = getattr(meta, "command", "common")
@@ -39,7 +42,7 @@ def _format_boolean_flag(flag, meta):
 def _generate_preset_flag(content, flag, meta):
     if not getattr(meta, "if_bazel_version", True):
         return None  # Flag does not apply to the version of Bazel currently running
-    content.add_all(meta.description.strip().split("\n"), format_each = "# %s", map_each = _strip)
+    content.add_all(meta.description.strip().split("\n"), map_each = _format_comment_line)
     content.add(_format_flag(flag, meta))
     return content
 
