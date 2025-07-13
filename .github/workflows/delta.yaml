@@ -36,6 +36,12 @@ jobs:
           git restore MODULE.bazel.lock tests/BUILD
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
+      - name: Disallow trailing whitespace
+        run: |
+          ! grep -q '[[:space:]]$' /tmp/new
+      - name: Require trailing newline
+        run: |
+          [ "$(tail -c1 /tmp/new | wc -l)" -eq 1 ]
       - name: Prior output
         id: old
         run: |
