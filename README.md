@@ -14,6 +14,10 @@ We call this a "preset".
 Bazel options may be stored in `*.bazelrc` files, in several places on disk.
 Read [the Bazel bazelrc documentation](https://bazel.build/run/bazelrc).
 
+🎙️ This rule was featured on the Aspect Insights podcast:
+
+[![Better Bazel Flag Defaults](https://img.youtube.com/vi/-iLgTR1J47g/0.jpg)](https://www.youtube.com/watch?v=-iLgTR1J47g&list=PLLU28e_DRwdtpojOqWM5UeFyxad7m9gCF&index=1)
+
 ## Install
 
 1. Add `bazelrc-preset.bzl` to your `MODULE.bazel` file.
@@ -72,7 +76,7 @@ Bazelisk provides [extra command-line options](https://github.com/bazelbuild/baz
 2. For flags that don't work, either
   - disable them by explicitly setting the value in your .bazelrc
   - fix the issues they report
-3. Turn on `strict=True` on the `bazelrc_preset` rule. This is a superset of running `bazelisk --strict build ...`
+3. Add `common --@bazelrc-preset.bzl//:strict` to the project `.bazelrc`. This is a superset of running `bazelisk --strict build ...`
 
 ## References and Credits
 

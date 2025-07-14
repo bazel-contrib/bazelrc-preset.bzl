@@ -27,13 +27,16 @@ jobs:
       - name: Opt-in to strict flags
         if: matrix.strict
         run: |
-          sed -i 's/strict = False/strict = True/' tests/BUILD
+          sudo tee -a /etc/bazel.bazelrc >/dev/null <<EOF
+          common --@bazelrc-preset.bzl//:strict
+          EOF
       - name: Current output
         id: new
         run: |
           bazel build tests:preset
           cat bazel-bin/tests/preset.bazelrc | tee /tmp/new
-          git restore MODULE.bazel.lock tests/BUILD
+          # Avoid problems with later bazel calls under --lockfile_mode=error
+          git restore MODULE.bazel.lock
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
       - name: Disallow trailing whitespace

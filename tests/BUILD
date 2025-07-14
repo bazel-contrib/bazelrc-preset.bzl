@@ -4,7 +4,10 @@ load("//:bazelrc-preset.bzl", "generate_preset")
 generate_preset(
     name = "preset",
     out = "preset.bazelrc",
-    strict = False,
+    strict = select({
+        "//:strict.true": True,
+        "//conditions:default": False,
+    }),
 )
 
 # To inspect the changes to presets when contributors send a PR
