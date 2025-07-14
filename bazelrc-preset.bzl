@@ -42,6 +42,7 @@ def _format_boolean_flag(flag, meta):
 def _generate_preset_flag(content, flag, meta):
     if not getattr(meta, "if_bazel_version", True):
         return None  # Flag does not apply to the version of Bazel currently running
+    content.add("")
     content.add_all(meta.description.strip().split("\n"), map_each = _format_comment_line)
     content.add(_format_flag(flag, meta))
     return content
@@ -58,7 +59,6 @@ def _generate_preset(ctx):
         "To update this file, run:",
         "  bazel run {}.update".format(ctx.label),
     ], format_each = "# %s")
-    content.add("")
 
     flags = FLAGS | (MIGRATIONS if ctx.attr.strict else {})
     for flag, meta in flags.items():
@@ -76,7 +76,6 @@ def _generate_preset(ctx):
         if flag_appears:
             content.add_all([
                 "# Docs: https://registry.build/flag/bazel@{}?filter={}".format(version, flag),
-                "",
             ])
     ctx.actions.write(ctx.outputs.out, content)
 
