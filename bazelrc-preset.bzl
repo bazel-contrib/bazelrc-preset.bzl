@@ -1,5 +1,6 @@
 """Rule/Macro pair to produce bazelrc preset file"""
 
+load("@aspect_bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
 load("@aspect_bazel_lib//lib:write_source_files.bzl", "write_source_file")
 load("@bazel_features_version//:version.bzl", "version")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
@@ -93,23 +94,29 @@ generate_preset = rule(
     },
 )
 
-def bazelrc_preset(name, out_file = None):
+def bazelrc_preset(name, out_file = None, **kwargs):
     """
     Creates a bazelrc preset file.
 
     Args:
         name: The name of the preset.
         out_file: The file to write the preset to. If not provided, the preset will be written to `{name}.bazelrc`.
+        **kwargs: Additional named arguments to pass to the `generate_preset` rule.
+            Common attributes (those in https://bazel.build/reference/be/common-definitions#common-attributes)
+            are propagated to the generated `write_source_file` rule as well.
     """
     if lt("6.0.0"):
         fail("bazelrc_preset requires Bazel 6 or later. You are running Bazel {}".format(version))
+
     generate_preset(
         name = name,
         out = "_{}.bazelrc".format(name),
-        strict = select({
+        # If strict was included in kwargs, use it. Otherwise, use the value from the flag.
+        strict = kwargs.pop("strict", select({
             Label("//:strict.true"): True,
             "//conditions:default": False,
-        }),
+        })),
+        **kwargs
     )
     if not out_file:
         out_file = "{}.bazelrc".format(name)
@@ -119,4 +126,5 @@ def bazelrc_preset(name, out_file = None):
         in_file = name,
         diff_test_failure_message = "The bazelrc preset has changed. Run 'bazel run {{TARGET}}' to update it.",
         file_missing_failure_message = "File %s is missing. Run 'bazel run {{TARGET}}' to create it." % out_file,
+        **propagate_common_rule_attributes(kwargs)
     )
