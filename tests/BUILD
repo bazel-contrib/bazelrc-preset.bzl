@@ -1,13 +1,9 @@
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
-load("//:bazelrc-preset.bzl", "generate_preset")
+load("//:bazelrc-preset.bzl", "bazelrc_preset")
 
-generate_preset(
+bazelrc_preset(
     name = "preset",
-    out = "preset.bazelrc",
-    strict = select({
-        "//:strict.true": True,
-        "//conditions:default": False,
-    }),
+    tags = ["manual"],
 )
 
 # To inspect the changes to presets when contributors send a PR
