@@ -401,7 +401,7 @@ MIGRATIONS = {
     ),
     "incompatible_repo_env_ignores_action_env": struct(
         default = True,
-        if_bazel_version = ge_same_major("8.0.0"),
+        if_bazel_version = ge_same_major("8.3.0"),
         description = """\
         Address a counterintuitive interaction with --action_env and it's affect on repository environments.
 
