@@ -34,7 +34,7 @@ jobs:
         id: new
         run: |
           bazel build tests:preset
-          cat bazel-bin/tests/preset.bazelrc | tee /tmp/new
+          cat bazel-bin/tests/_preset.bazelrc | tee /tmp/new
           # Avoid problems with later bazel calls under --lockfile_mode=error
           git restore MODULE.bazel.lock
         env:
@@ -50,7 +50,7 @@ jobs:
         run: |
           git checkout ${{ github.event.pull_request.base.sha }}
           bazel build tests:preset
-          cat bazel-bin/tests/preset.bazelrc | tee /tmp/old
+          cat bazel-bin/tests/_preset.bazelrc | tee /tmp/old
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel_version }}
       - name: Show diff
