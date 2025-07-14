@@ -347,7 +347,7 @@ MIGRATIONS = {
         """,
     ),
     "incompatible_autoload_externally": struct(
-        default = True,
+        default = "",
         if_bazel_version = ge_same_major("8.0.0"),
         description = """\
         Language specific rules (Protos, Java, C++, Android) are being rewritten to Starlark and moved from Bazel into their rules repositories
