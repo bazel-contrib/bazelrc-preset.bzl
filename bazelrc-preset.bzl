@@ -112,7 +112,7 @@ def bazelrc_preset(name, out_file = None, **kwargs):
         name = name,
         out = "_{}.bazelrc".format(name),
         # If strict was included in kwargs, use it. Otherwise, use the value from the flag.
-        strict = getattr(kwargs, "strict", select({
+        strict = kwargs.pop("strict", select({
             Label("//:strict.true"): True,
             "//conditions:default": False,
         })),
