@@ -76,7 +76,7 @@ Bazelisk provides [extra command-line options](https://github.com/bazelbuild/baz
 2. For flags that don't work, either
   - disable them by explicitly setting the value in your .bazelrc
   - fix the issues they report
-3. Turn on `strict=True` on the `bazelrc_preset` rule. This is a superset of running `bazelisk --strict build ...`
+3. Add `common --@bazelrc-preset.bzl//:strict` to the project `.bazelrc`. This is a superset of running `bazelisk --strict build ...`
 
 ## References and Credits
 
