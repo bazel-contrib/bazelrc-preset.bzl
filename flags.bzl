@@ -63,6 +63,14 @@ FLAGS = {
         equivalent to using `--config=linux` on Linux, `--config=windows` on Windows, etc.
         """,
     ),
+    "experimental_allow_tags_propagation": struct(
+        default = True,
+        if_bazel_version = ge_same_major("6.0.0"),
+        description = """\
+        Allow tags to be propagated to external repositories.
+        Flipped to true in Bazel 7, see https://github.com/bazelbuild/bazel/commit/d0625f5b37e7cfe4ecfcff02b15f634c53d7440c
+        """,
+    ),
     "experimental_check_external_repository_files": struct(
         default = False,
         description = """\
