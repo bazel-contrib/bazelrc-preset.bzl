@@ -1,9 +1,10 @@
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 
+package(default_visibility = ["//visibility:public"])
+
 bool_flag(
     name = "strict",
     build_setting_default = False,
-    visibility = ["//visibility:public"],
 )
 
 config_setting(
