@@ -67,17 +67,11 @@ def _generate_preset(ctx):
         if type(meta) != type([]):
             meta = [meta]
         _verify_command_overrides(meta)
-        flag_appears = False
         for meta_item in meta:
             content_with_flag = _generate_preset_flag(content, flag, meta_item)
             if content_with_flag:
                 content = content_with_flag
-                flag_appears = True
-                break
-        if flag_appears:
-            content.add_all([
-                "# Docs: https://registry.build/flag/bazel@{}?filter={}".format(version, flag),
-            ])
+                content.add("# Docs: https://registry.build/flag/bazel@{}?filter={}".format(version, flag))
     ctx.actions.write(ctx.outputs.out, content)
 
 generate_preset = rule(
