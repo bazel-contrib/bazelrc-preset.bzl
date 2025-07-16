@@ -229,13 +229,24 @@ FLAGS = {
         On CI, extend the maximum amount of time to wait for remote execution and cache calls.
         """,
     ),
-    "remote_upload_local_results": struct(
-        command = "common:ci",
-        default = True,
-        description = """\
-        On CI, upload locally executed action results to the remote cache.
-        """,
-    ),
+    "remote_upload_local_results": [
+        struct(
+            default = False,
+            description = """\
+            Do not upload locally executed action results to the remote cache.
+            This should be the default for local builds so local builds cannot poison the remote cache.
+
+            Note that this flag is flipped to True under --config=ci, see below.
+            """,
+        ),
+        struct(
+            command = "common:ci",
+            default = True,
+            description = """\
+            On CI, upload locally executed action results to the remote cache.
+            """,
+        ),
+    ],
     "repo_env": struct(
         default = "JAVA_HOME=../bazel_tools/jdk",
         description = """\
