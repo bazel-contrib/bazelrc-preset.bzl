@@ -40,6 +40,18 @@ FLAGS = {
         This ensures tests are executed fresh each time, useful for debugging and ensuring test reliability.
         """,
     ),
+    "check_direct_dependencies": struct(
+        command = "common:ruleset",
+        default = "off",
+        description = """\
+        Don’t encourage a rules author to update their deps if not needed.
+        These bazel_dep calls should indicate the minimum version constraint of the ruleset.
+        If the author instead updates to the newest of any of their transitives, as this flag would suggest,
+        then they'll also force their dependents to a newer version.
+        Context:
+        https://bazelbuild.slack.com/archives/C014RARENH0/p1691158021917459?thread_ts=1691156601.420349&cid=C014RARENH0
+        """,
+    ),
     "color": struct(
         command = "common:ci",
         default = "yes",
