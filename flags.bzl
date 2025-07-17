@@ -40,7 +40,7 @@ FLAGS = {
         This ensures tests are executed fresh each time, useful for debugging and ensuring test reliability.
         """,
     ),
-    "check_direct_dependencies": struct(),
+    "check_direct_dependencies": struct(
         command = "common:ruleset",
         default = "off",
         description = """\
