@@ -430,6 +430,16 @@ MIGRATIONS = {
         See https://github.com/bazelbuild/bazel/issues/17032
         """,
     ),
+    "incompatible_exclusive_test_sandboxed": struct(
+        default = True,
+        if_bazel_version = ge_same_major("6.0.0"),
+        description = """\
+         Allow exclusive tests to run in the sandbox.
+         Fixes a bug where Bazel doesn't enable sandboxing for tests with `tags=["exclusive"]`.
+
+        See https://github.com/bazelbuild/bazel/issues/16871
+        """,
+    ),
     "incompatible_repo_env_ignores_action_env": struct(
         default = True,
         if_bazel_version = ge_same_major("8.3.0"),
