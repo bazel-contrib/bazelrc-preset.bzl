@@ -53,6 +53,9 @@ def _verify_command_overrides(meta):
     if sets.length(unique_commands) != len(meta):
         fail("Multiple flag overrides use the same command. Make sure flag overrides use different command.")
 
+def _get_flags_from_extra_presets(extra_presets_json):
+    return {key: struct(**value) for key, value in json.decode(extra_presets_json).items()}
+
 def _generate_preset(ctx):
     content = ctx.actions.args().set_param_file_format("multiline")
     content.add_all([
@@ -61,7 +64,7 @@ def _generate_preset(ctx):
         "  bazel run {}.update".format(ctx.label),
     ], format_each = "# %s")
 
-    flags = FLAGS | (MIGRATIONS if ctx.attr.strict else {})
+    flags = FLAGS | (MIGRATIONS if ctx.attr.strict else {}) | _get_flags_from_extra_presets(ctx.attr.extra_presets)
     for flag, meta in flags.items():
         # Syntax sugar: allow a struct to stand in for a singleton list
         if type(meta) != type([]):
@@ -77,6 +80,11 @@ def _generate_preset(ctx):
 generate_preset = rule(
     implementation = _generate_preset,
     attrs = {
+        "extra_presets": attr.string(
+            doc = """\
+            A json encoded string of presets to add to the preset generation matching the format of the FLAGS dictionary.
+            """,
+        ),
         "out": attr.output(),
         "strict": attr.bool(
             default = False,
@@ -110,6 +118,7 @@ def bazelrc_preset(name, out_file = None, **kwargs):
             Label("//:strict.true"): True,
             "//conditions:default": False,
         })),
+        extra_presets = json.encode(kwargs.pop("extra_presets", {})),
         **kwargs
     )
     if not out_file:
