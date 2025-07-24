@@ -1,7 +1,7 @@
 """Extra test presets for bazelrc-preset"""
 
 EXTRA_TEST_PRESETS = {
-    "extra_preset_test": struct(
+    "extra_preset_as_struct": struct(
         command = "common:foo",
         default = True,
         description = """\
