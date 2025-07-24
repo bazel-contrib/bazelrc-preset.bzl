@@ -191,6 +191,15 @@ FLAGS = {
         See https://github.com/bazelbuild/bazel/issues/16871.
         """,
     ),
+    "incompatible_merge_fixed_and_default_shell_env": struct(
+        default = True,
+        if_bazel_version = ge_same_major("6.4.0"),
+        description = """\
+        Actions registered with ctx.actions.run{_shell} with both 'env' and 'use_default_shell_env = True' specified
+        use an environment obtained from the default shell environment by overriding with the values passed in to 'env'.
+        See https://github.com/bazelbuild/bazel/pull/19319.
+        """,
+    ),
     "incompatible_strict_action_env": struct(
         default = True,
         description = """\
