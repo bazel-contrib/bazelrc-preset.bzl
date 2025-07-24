@@ -78,6 +78,31 @@ Bazelisk provides [extra command-line options](https://github.com/bazelbuild/baz
   - fix the issues they report
 3. Add `common --@bazelrc-preset.bzl//:strict` to the project `.bazelrc`. This is a superset of running `bazelisk --strict build ...`
 
+## Project-specific Presets
+
+If your project defines specific flags that users should set, you can define them in your project as follows:
+
+1. Define your own flags using the same data structure as [`flags.bzl`](flags.bzl) or [`tests/extra_test_presets.bzl`](tests/extra_test_presets.bzl).
+2. Add a `bazelrc_preset_test` to make sure your presets format is correct.
+
+```starlark
+bazelrc_preset_test(
+    name = "test_project_preset",
+    extra_presets = CUSTOM_PROJECT_PRESETS,
+)
+```
+
+3. Any user of your project can now consume your presets and add them to their presets
+
+```starlark
+load("@my_project//:flags.bzl", "CUSTOM_PROJECT_PRESETS")
+
+bazelrc_preset(
+    name = "preset",
+    extra_presets = CUSTOM_PROJECT_PRESETS
+)
+```
+
 ## References and Credits
 
 This was originally a feature of Aspect's bazel-lib:
