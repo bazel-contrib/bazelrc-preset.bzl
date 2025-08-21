@@ -1,7 +1,7 @@
 load("@aspect_bazel_lib//lib:testing.bzl", "assert_contains")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("//:bazelrc-preset.bzl", "bazelrc_preset", "bazelrc_preset_test")
-load(":extra_test_presets.bzl", "EXTRA_TEST_PRESETS")
+load(":extra_test_presets.bzl", "ALLOW_REPEATED_PRESETS", "EXTRA_TEST_PRESETS")
 
 bazelrc_preset(
     name = "preset",
@@ -66,4 +66,21 @@ bazelrc_preset_test(
     name = "test_strict_preset_with_extra_presets",
     extra_presets = EXTRA_TEST_PRESETS,
     strict = True,
+)
+
+bazelrc_preset_test(
+    name = "test_allow_repeated_flag",
+    extra_presets = ALLOW_REPEATED_PRESETS,
+)
+
+assert_contains(
+    name = "test_allow_repeated_flag_contains_the_first_value",
+    actual = ":test_allow_repeated_flag",
+    expected = "common --allow_repeated_flag=1",
+)
+
+assert_contains(
+    name = "test_allow_repeated_flag_contains_the_second_value",
+    actual = ":test_allow_repeated_flag",
+    expected = "common --allow_repeated_flag=2",
 )
