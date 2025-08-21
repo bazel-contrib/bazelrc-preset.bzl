@@ -50,12 +50,17 @@ def _generate_preset_flag(content, flag, meta):
     return content
 
 def _verify_command_overrides(meta):
+    if any([getattr(meta_item, "allow_repeated", False) for meta_item in meta]):
+        return
     unique_commands = sets.make([getattr(meta_item, "command", "common") for meta_item in meta])
     if sets.length(unique_commands) != len(meta):
-        fail("Multiple flag overrides use the same command. Make sure flag overrides use different command.")
+        fail("Multiple flag overrides use the same command. Make sure flag overrides use different command. If you want to allow multiple commands, set allow_repeated=True.")
 
 def _get_flags_from_extra_presets(extra_presets_json):
-    return {key: struct(**value) for key, value in json.decode(extra_presets_json).items()}
+    return {
+        key: [struct(**item) for item in value] if type(value) == type([]) else struct(**value)
+        for key, value in json.decode(extra_presets_json).items()
+    }
 
 def _generate_preset(ctx):
     content = ctx.actions.args().set_param_file_format("multiline")

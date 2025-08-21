@@ -10,3 +10,17 @@ EXTRA_TEST_PRESETS = {
         """,
     ),
 }
+
+ALLOW_REPEATED_PRESETS = {
+    "allow_repeated_flag": [
+        struct(
+            default = 1,
+            description = "Value number one.",
+        ),
+        struct(
+            default = 2,
+            allow_repeated = True,
+            description = "Value number two. Allows multiple commands to be specified.",
+        ),
+    ],
+}
