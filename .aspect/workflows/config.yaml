@@ -1,4 +1,7 @@
 # See https://docs.aspect.build/workflows/configuration
+bazel:
+  flags:
+    - --config=ci
 tasks:
   - test:
       name: "Test (Bazel 6.x)"
