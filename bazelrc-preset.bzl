@@ -80,12 +80,24 @@ def _generate_preset(ctx):
             content_with_flag = _generate_preset_flag(content, flag, meta_item)
             if content_with_flag:
                 content = content_with_flag
-                content.add("# Docs: https://registry.build/flag/bazel@{}?filter={}".format(version, flag))
+                content.add("# Docs: " + ctx.attr.doc_link_template.format(
+                    version = version,
+                    flag = flag,
+                ))
     ctx.actions.write(ctx.outputs.out, content)
 
 generate_preset = rule(
     implementation = _generate_preset,
     attrs = {
+        "doc_link_template": attr.string(
+            doc = """\
+            A template for the link to the flag documentation.
+            Placeholders in the string will be replaced with the actual values:
+            - `{version}`: The version of Bazel
+            - `{flag}`: The flag name
+            """,
+            default = "https://registry.build/flag/bazel@{version}?filter={flag}",
+        ),
         "extra_presets": attr.string(
             doc = """\
             A json encoded string of presets to add to the preset generation matching the format of the FLAGS dictionary.
