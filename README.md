@@ -74,8 +74,8 @@ Bazelisk provides [extra command-line options](https://github.com/bazelbuild/baz
 
 1. Run `bazelisk --migrate build --nobuild //...` to try upgrading new strict flags.
 2. For flags that don't work, either
-  - disable them by explicitly setting the value in your .bazelrc
-  - fix the issues they report
+   - disable them by explicitly setting the value in your .bazelrc
+   - fix the issues they report
 3. Add `common --@bazelrc-preset.bzl//:strict` to the project `.bazelrc`. This is a superset of running `bazelisk --strict build ...`
 
 ## Project-specific Presets
