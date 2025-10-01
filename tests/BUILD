@@ -1,4 +1,4 @@
-load("@aspect_bazel_lib//lib:testing.bzl", "assert_contains")
+load("@bazel_lib//lib:testing.bzl", "assert_contains")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("//:bazelrc-preset.bzl", "bazelrc_preset", "bazelrc_preset_test")
 load(":extra_test_presets.bzl", "ALLOW_REPEATED_PRESETS", "EXTRA_TEST_PRESETS")
