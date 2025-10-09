@@ -15,13 +15,6 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 bazel_skylib_workspace()
 
 http_archive(
-    name = "aspect_bazel_lib",
-    sha256 = "9a44f457810ce64ec36a244cc7c807607541ab88f2535e07e0bf2976ef4b73fe",
-    strip_prefix = "bazel-lib-2.19.4",
-    url = "https://github.com/bazel-contrib/bazel-lib/releases/download/v2.19.4/bazel-lib-v2.19.4.tar.gz",
-)
-
-http_archive(
     name = "bazel_lib",
     sha256 = "46960e9fa6c9352d883768280951ac388dba8cb9ff0256182fb77925eae2b6ac",
     strip_prefix = "bazel-lib-3.0.0-beta.1",
