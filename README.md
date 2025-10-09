@@ -21,6 +21,10 @@ Read [the Bazel bazelrc documentation](https://bazel.build/run/bazelrc).
 ## Install
 
 1. Add `bazelrc-preset.bzl` to your `MODULE.bazel` file.
+    ```starlark
+    bazel_dep(name = "bazelrc-preset.bzl", version = "...")
+    ```
+    
 2. Call it from a `BUILD` file, for example in `tools/BUILD`:
 
     ```starlark
