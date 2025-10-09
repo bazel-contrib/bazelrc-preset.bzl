@@ -21,9 +21,16 @@ http_archive(
     url = "https://github.com/bazel-contrib/bazel-lib/releases/download/v2.19.4/bazel-lib-v2.19.4.tar.gz",
 )
 
-load("@aspect_bazel_lib//lib:repositories.bzl", "aspect_bazel_lib_dependencies")
+http_archive(
+    name = "bazel_lib",
+    sha256 = "46960e9fa6c9352d883768280951ac388dba8cb9ff0256182fb77925eae2b6ac",
+    strip_prefix = "bazel-lib-3.0.0-beta.1",
+    url = "https://github.com/bazel-contrib/bazel-lib/releases/download/v3.0.0-beta.1/bazel-lib-v3.0.0-beta.1.tar.gz",
+)
 
-aspect_bazel_lib_dependencies()
+load("@bazel_lib//lib:repositories.bzl", "bazel_lib_dependencies")
+
+bazel_lib_dependencies()
 
 http_archive(
     name = "bazel_features",

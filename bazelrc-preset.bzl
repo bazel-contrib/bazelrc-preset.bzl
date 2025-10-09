@@ -1,9 +1,25 @@
-"""Rule/Macro pair to produce bazelrc preset file"""
+"""Rule/Macro pair to produce a bazelrc preset file.
 
-load("@aspect_bazel_lib//lib:testing.bzl", "assert_outputs")
-load("@aspect_bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
-load("@aspect_bazel_lib//lib:write_source_files.bzl", "write_source_file")
+Typical usage:
+
+```starlark
+load("@bazelrc-preset.bzl", "bazelrc_preset")
+
+bazelrc_preset(
+    name = "preset",
+    strict = False, # Change to True to opt-in to flags that are flipped in the upcoming major release
+)
+```
+
+Then run `bazel run //tools:preset.update` to create the preset file, and import that in your `.bazelrc` file.
+
+See the project's README.md for more details.
+"""
+
 load("@bazel_features_version//:version.bzl", "version")
+load("@bazel_lib//lib:testing.bzl", "assert_outputs")
+load("@bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
+load("@bazel_lib//lib:write_source_files.bzl", "write_source_file")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
 load("//:flags.bzl", "FLAGS", "MIGRATIONS")
 load("//private:util.bzl", "lt")
