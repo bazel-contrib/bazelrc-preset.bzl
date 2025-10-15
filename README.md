@@ -118,6 +118,10 @@ If your project defines specific flags that users should set, you can define the
     )
     ```
 
+## API Documentation
+
+https://registry.bazel.build/docs/bazelrc-preset.bzl
+
 ## References and Credits
 
 This was originally a feature of Aspect's bazel-lib:
