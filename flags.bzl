@@ -218,6 +218,14 @@ FLAGS = {
         This flag was flipped for Bazel 8.
         """,
     ),
+    "module_mirrors": struct(
+        default = "bcr.cloudflaremirrors.com",
+        if_bazel_version = ge("8.4.0"),
+        description = """\
+        Add the CloudFlare mirror of BCR-referenced downloads.
+        Improves reliability of Bazel when CDNs are flaky, for example issues with ftp.gnu.org in 2025.
+        """,
+    ),
     "remote_download_outputs": struct(
         command = "common:ci",
         if_bazel_version = ge("7.0.0rc1"),
