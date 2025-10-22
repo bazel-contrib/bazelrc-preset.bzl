@@ -219,7 +219,7 @@ FLAGS = {
         """,
     ),
     "module_mirrors": struct(
-        default = "bcr.cloudflaremirrors.com",
+        default = "https://bcr.cloudflaremirrors.com",
         if_bazel_version = ge("8.4.0"),
         description = """\
         Add the CloudFlare mirror of BCR-referenced downloads.
