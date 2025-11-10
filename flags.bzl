@@ -208,6 +208,11 @@ FLAGS = {
         See https://github.com/bazelbuild/bazel/pull/19319.
         """,
     ),
+    "incompatible_modify_execution_info_additive": struct(
+        default = True,
+        if_bazel_version = ge("7.2.0"),
+        description = "Accept multiple --modify_execution_info flags, rather than the last flag overwriting earlier ones.",
+    ),
     "incompatible_strict_action_env": struct(
         default = True,
         description = """\
