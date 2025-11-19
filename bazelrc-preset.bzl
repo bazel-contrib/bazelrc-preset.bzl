@@ -21,8 +21,11 @@ load("@bazel_lib//lib:testing.bzl", "assert_outputs")
 load("@bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
 load("@bazel_lib//lib:write_source_files.bzl", "write_source_file")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
-load("//:flags.bzl", "FLAGS", "MIGRATIONS")
+load("//:flags.bzl", "FLAGS", "MIGRATIONS", _non_rbe = "NON_RBE")
 load("//private:util.bzl", "lt")
+
+# Re-export for users to load() and pass to extra_presets
+NON_RBE = _non_rbe
 
 def _format_comment_line(s):
     s = s.strip()
