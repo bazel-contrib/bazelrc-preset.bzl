@@ -31,10 +31,10 @@ repos:
       - id: buildifier-lint
         args: [--version, "v8.2.0"]
   - repo: https://github.com/google/yamlfmt
-    rev: v0.17.2
+    rev: v0.20.0
     hooks:
       - id: yamlfmt
   - repo: https://github.com/crate-ci/typos
-    rev: v1.36.2
+    rev: v1.40.0
     hooks:
       - id: typos
