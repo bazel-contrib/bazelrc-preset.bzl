@@ -22,7 +22,7 @@ jobs:
             strict: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # get enough history to include the base commit
       - name: Opt-in to strict flags
