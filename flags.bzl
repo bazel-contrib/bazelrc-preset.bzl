@@ -231,6 +231,15 @@ FLAGS = {
         This flag was flipped for Bazel 8.
         """,
     ),
+    "lockfile_mode": struct(
+        command = "common:ci",
+        default = "error",
+        if_bazel_version = ge("7.0.0rc1"),
+        description = """\
+        Fail the build if the MODULE.bazel.lock file is out of date.
+        Using this mode in ci prevents the lockfile from being out of date.
+        """,
+    ),
     "module_mirrors": struct(
         default = "https://bcr.cloudflaremirrors.com",
         if_bazel_version = ge("8.4.0"),
