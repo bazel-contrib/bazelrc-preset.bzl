@@ -494,3 +494,16 @@ MIGRATIONS = {
         """,
     ),
 }
+
+NON_RBE = {
+    "modify_execution_info": struct(
+        default = "Tar=+no-remote-cache,PackageTar=+no-remote-cache",
+        description = """\
+          Avoid overloading the remote cache with tar outputs.
+          They are expensive to send over a network and store, but quick to reconstruct from inputs.
+          This setting is applied when no remote execution takes place.
+          
+          See https://github.com/bazel-contrib/tar.bzl/blob/main/README.md#remote-cache-and-rbe
+          """,
+    ),
+}
