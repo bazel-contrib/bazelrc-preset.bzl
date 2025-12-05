@@ -109,6 +109,14 @@ FLAGS = {
         Back-port the updated flag default value to older Bazel versions.
         """,
     ),
+    "experimental_remote_discard_merkle_trees": struct(
+        default = True,
+        if_bazel_version = ge("7.0.0") and lt("8.0.0rc1"),
+        description = """\
+        Discard Merkle trees for remote actions reducing memory usage significantly.
+        Requires Bazel to recompute them upon remote cache misses and retries.
+        """,
+    ),
     "experimental_repository_downloader_retries": struct(
         default = 5,
         if_bazel_version = ge("5.0.0") and lt("8.0.0"),
@@ -502,7 +510,7 @@ NON_RBE = {
           Avoid overloading the remote cache with tar outputs.
           They are expensive to send over a network and store, but quick to reconstruct from inputs.
           This setting is applied when no remote execution takes place.
-          
+
           See https://github.com/bazel-contrib/tar.bzl/blob/main/README.md#remote-cache-and-rbe
           """,
     ),
