@@ -193,10 +193,11 @@ FLAGS = {
     ),
     "incompatible_enforce_starlark_utf8": struct(
         default = "error",
-        if_bazel_version = ge("8.1.0"),
+        if_bazel_version = ge("8.5.0"),
         description = """\
         Fail if Starlark files are not UTF-8 encoded.
         Introduced in Bazel 8.1, see https://github.com/bazelbuild/bazel/pull/24944
+        Recommended to enable since Bazel 8.5, see https://github.com/bazel-contrib/bazelrc-preset.bzl/issues/95
         """,
     ),
     "incompatible_exclusive_test_sandboxed": struct(
