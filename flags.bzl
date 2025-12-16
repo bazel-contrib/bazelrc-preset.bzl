@@ -224,6 +224,7 @@ FLAGS = {
     ),
     "incompatible_strict_action_env": struct(
         default = True,
+        if_bazel_version = lt("9.0.0"),
         description = """\
         Make builds more reproducible by using a static value for PATH and not inheriting LD_LIBRARY_PATH.
         Use `--action_env=ENV_VARIABLE` if you want to inherit specific variables from the environment where Bazel runs.
