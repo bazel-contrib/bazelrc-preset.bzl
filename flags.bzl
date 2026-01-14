@@ -164,6 +164,7 @@ FLAGS = {
     ),
     "host_jvm_args": struct(
         default = "-DBAZEL_TRACK_SOURCE_DIRECTORIES=1",
+        if_bazel_version = lt("9.0.0"),
         command = "startup",
         description = """\
         Allow the Bazel server to check directory sources for changes. Ensures that the Bazel server
