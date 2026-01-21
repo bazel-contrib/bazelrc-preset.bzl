@@ -309,6 +309,8 @@ FLAGS = {
         ),
     ],
     "repo_env": struct(
+        # Make sure others can still set this, see https://github.com/bazel-contrib/bazelrc-preset.bzl/issues/105
+        allow_repeated = True,
         default = "JAVA_HOME=../bazel_tools/jdk",
         description = """\
         Repository rules, such as rules_jvm_external: put Bazel's JDK on the path.
