@@ -309,16 +309,27 @@ FLAGS = {
             """,
         ),
     ],
-    "repo_env": struct(
-        # Make sure others can still set this, see https://github.com/bazel-contrib/bazelrc-preset.bzl/issues/105
-        allow_repeated = True,
-        default = "JAVA_HOME=../bazel_tools/jdk",
-        description = """\
-        Repository rules, such as rules_jvm_external: put Bazel's JDK on the path.
-        Avoids non-hermeticity from dependency on a JAVA_HOME pointing at a system JDK
-        see https://github.com/bazelbuild/rules_jvm_external/issues/445
-        """,
-    ),
+    "repo_env": [
+        struct(
+            # Make sure others can still set this, see https://github.com/bazel-contrib/bazelrc-preset.bzl/issues/105
+            allow_repeated = True,
+            default = "JAVA_HOME=../bazel_tools/jdk",
+            description = """\
+            Repository rules, such as rules_jvm_external: put Bazel's JDK on the path.
+            Avoids non-hermeticity from dependency on a JAVA_HOME pointing at a system JDK
+            see https://github.com/bazelbuild/rules_jvm_external/issues/445
+            """,
+        ),
+        struct(
+            allow_repeated = True,
+            default = "DO_NOT_TRACK=1",
+            description = """\
+            Indicate that third party rulesets should not collect telemetry.
+            It's up to the ruleset to honor this setting.
+            see https://donottrack.sh
+            """,
+        ),
+    ],
     "reuse_sandbox_directories": struct(
         default = True,
         description = """\
