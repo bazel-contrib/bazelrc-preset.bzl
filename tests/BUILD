@@ -1,6 +1,7 @@
 load("@bazel_lib//lib:testing.bzl", "assert_contains")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("//:bazelrc-preset.bzl", "bazelrc_preset", "bazelrc_preset_test")
+load("//:flags.bzl", "HERMETIC_TOOLCHAIN", "NON_RBE")
 load(":extra_test_presets.bzl", "ALLOW_REPEATED_PRESETS", "EXTRA_TEST_PRESETS")
 
 bazelrc_preset(
@@ -83,4 +84,15 @@ assert_contains(
     name = "test_allow_repeated_flag_contains_the_second_value",
     actual = ":test_allow_repeated_flag",
     expected = "common --allow_repeated_flag=2",
+)
+
+# Test our actual extra presets
+bazelrc_preset_test(
+    name = "test_non_rbe_extra_presets",
+    extra_presets = NON_RBE,
+)
+
+bazelrc_preset_test(
+    name = "test_hermetic_toolchain_extra_presets",
+    extra_presets = HERMETIC_TOOLCHAIN,
 )

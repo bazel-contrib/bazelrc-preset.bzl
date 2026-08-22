@@ -118,6 +118,12 @@ If your project defines specific flags that users should set, you can define the
     )
     ```
 
+This project already defines the following `extra_presets`:
+
+* `MIGRATIONS` useful for preparing a major bazel version bump (automatically enabled if `strict = True`)
+* `NON_RBE` additional flags recommended when you are not using RBE
+* `HERMETIC_TOOLCHAIN` if you want to enforce usage of a hermetic toolchain and avoid depending on a system one
+
 ## API Documentation
 
 https://registry.bazel.build/docs/bazelrc-preset.bzl

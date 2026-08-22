@@ -520,3 +520,24 @@ NON_RBE = {
           """,
     ),
 }
+
+HERMETIC_TOOLCHAIN = {
+    "repo_env": [
+        struct(
+            # Make sure others can still set this, see https://github.com/bazel-contrib/bazelrc-preset.bzl/issues/105
+            allow_repeated = True,
+            default = "BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1",
+            description = """\
+        Force a hermetic toolchain, make sure we don't accidentally used the default one
+        """,
+        ),
+        struct(
+            # Make sure others can still set this, see https://github.com/bazel-contrib/bazelrc-preset.bzl/issues/105
+            allow_repeated = True,
+            default = "BAZEL_NO_APPLE_CPP_TOOLCHAIN=1",
+            description = """\
+        Force a hermetic toolchain, make sure we don't accidentally used the default one
+        """,
+        ),
+    ],
+}
