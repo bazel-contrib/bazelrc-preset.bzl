@@ -120,7 +120,7 @@ If your project defines specific flags that users should set, you can define the
 
 ## API Documentation
 
-https://registry.bazel.build/docs/bazelrc-preset.bzl
+Documentation Tab on https://registry.bazel.build/modules/bazelrc-preset.bzl/
 
 ## References and Credits
 
