@@ -11,6 +11,8 @@ FLAGS = {
         On CI, announce all announces command options read from the bazelrc file(s) when starting up at the
         beginning of each Bazel invocation. This is very useful on CI to be able to inspect which flags
         are being applied on each run based on the order of overrides.
+
+        TEST
         """,
     ),
     "build_runfile_links": [
