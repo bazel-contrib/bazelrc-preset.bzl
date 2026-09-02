@@ -7,6 +7,9 @@ on:
 jobs:
   delta:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     strategy:
       matrix:
         bazel_version:
@@ -64,10 +67,9 @@ jobs:
           fi
           echo '```' >> /tmp/diff
           echo "diff=/tmp/diff" >> $GITHUB_OUTPUT
-      - uses: thollander/actions-comment-pull-request@v3
+      - uses: mshick/add-pr-comment@v3.12.0
         if: steps.diff.outputs.different == 'true'
         with:
-          message:
-          file-path: ${{ steps.diff.outputs.diff }}
-          # Update existing comment on new PR snapshot
-          comment-tag: ${{ matrix.bazel_version }}-${{ matrix.strict }}
+          message-path: ${{ steps.diff.outputs.diff }}
+          # Update existing comment on new PR snapshot.
+          message-id: ${{ matrix.bazel_version }}-${{ matrix.strict }}
