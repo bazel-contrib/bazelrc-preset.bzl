@@ -26,6 +26,7 @@ bzl_library(
         "@bazel_lib//lib:write_source_files",
         "@diff.bzl//diff:defs",
         "@bazel_skylib//lib:new_sets",
+        "@bazel_skylib//rules:native_binary",
     ],
 )
 

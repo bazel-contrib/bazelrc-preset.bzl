@@ -22,6 +22,7 @@ load("@bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
 load("@bazel_lib//lib:write_source_files.bzl", "write_source_file")
 load("@diff.bzl//diff:defs.bzl", _diff = "diff")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
+load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("//:flags.bzl", "FLAGS", "MIGRATIONS", _non_rbe = "NON_RBE")
 load("//private:util.bzl", "lt")
 
@@ -189,9 +190,9 @@ def bazelrc_preset(name, out_file = None, **kwargs):
         test_args = ["--compare", "$(rootpath :{})".format(diff_target), update_target]
         test_data = [":{}".format(diff_target)]
 
-    native.sh_test(
+    native_test(
         name = "{}.update_test".format(name),
-        srcs = [Label("//private:check_preset_diff.sh")],
+        src = Label("//private:check_preset_diff.sh"),
         args = test_args,
         data = test_data,
         **propagate_common_rule_attributes(kwargs)
