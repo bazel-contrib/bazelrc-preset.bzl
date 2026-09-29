@@ -68,8 +68,12 @@ jobs:
           echo '```' >> /tmp/diff
           echo "diff=/tmp/diff" >> $GITHUB_OUTPUT
       - uses: mshick/add-pr-comment@v3.12.0
-        if: steps.diff.outputs.different == 'true'
+        # Fork PRs receive a read-only GITHUB_TOKEN, so the comment API rejects writes.
+        if: steps.diff.outputs.different == 'true' && github.event.pull_request.head.repo.full_name == github.repository
         with:
           message-path: ${{ steps.diff.outputs.diff }}
           # Update existing comment on new PR snapshot.
           message-id: ${{ matrix.bazel_version }}-${{ matrix.strict }}
+      - name: Show diff in job summary for fork PRs
+        if: steps.diff.outputs.different == 'true' && github.event.pull_request.head.repo.full_name != github.repository
+        run: cat /tmp/diff >> "$GITHUB_STEP_SUMMARY"
