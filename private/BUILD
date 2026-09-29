@@ -1,5 +1,7 @@
 load("@bazel_lib//:bzl_library.bzl", "bzl_library")
 
+exports_files(["check_preset_diff.sh"], visibility = ["//visibility:public"])
+
 bzl_library(
     name = "parse",
     srcs = ["parse.bzl"],
