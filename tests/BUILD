@@ -1,8 +1,8 @@
 load("@bazel_lib//lib:testing.bzl", "assert_contains")
-load("@diff.bzl//diff:defs.bzl", "diff")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("//:bazelrc-preset.bzl", "bazelrc_preset", "bazelrc_preset_test")
+load("//private:diff.bzl", "hermetic_diff")
 load(":extra_test_presets.bzl", "ALLOW_REPEATED_PRESETS", "EXTRA_TEST_PRESETS")
 
 bazelrc_preset(
@@ -93,10 +93,10 @@ write_file(
     content = ["matching", ""],
 )
 
-diff(
+hermetic_diff(
     name = "preset_diff_fixture",
-    srcs = ["preset_diff_fixture.txt", ":generated_diff_fixture"],
-    args = [],
+    old_file = "preset_diff_fixture.txt",
+    new_file = ":generated_diff_fixture",
 )
 
 native_test(

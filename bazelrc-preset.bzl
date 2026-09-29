@@ -20,10 +20,10 @@ load("@bazel_features_version//:version.bzl", "version")
 load("@bazel_lib//lib:testing.bzl", "assert_outputs")
 load("@bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
 load("@bazel_lib//lib:write_source_files.bzl", "write_source_file")
-load("@diff.bzl//diff:defs.bzl", _diff = "diff")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
 load("//:flags.bzl", "FLAGS", "MIGRATIONS", _non_rbe = "NON_RBE")
+load("//private:diff.bzl", "hermetic_diff")
 load("//private:util.bzl", "lt")
 
 # Re-export for users to load() and pass to extra_presets
@@ -180,11 +180,10 @@ def bazelrc_preset(name, out_file = None, **kwargs):
     test_data = []
     if native.glob([out_file], allow_empty = True):
         diff_target = "{}.update_diff".format(name)
-        _diff(
+        hermetic_diff(
             name = diff_target,
-            srcs = [out_file, name],
-            # Normal diff writes an empty patch when the files match.
-            args = [],
+            old_file = out_file,
+            new_file = name,
             **propagate_common_rule_attributes(kwargs)
         )
         test_args = ["--compare", "$(rootpath :{})".format(diff_target), update_target]
