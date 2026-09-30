@@ -21,9 +21,8 @@ load("@bazel_lib//lib:testing.bzl", "assert_outputs")
 load("@bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
 load("@bazel_lib//lib:write_source_files.bzl", "write_source_file")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
-load("@bazel_skylib//rules:native_binary.bzl", "native_test")
+load("@diff.bzl//diff:defs.bzl", "diff")
 load("//:flags.bzl", "FLAGS", "MIGRATIONS", _non_rbe = "NON_RBE")
-load("//private:diff.bzl", "hermetic_diff")
 load("//private:util.bzl", "lt")
 
 # Re-export for users to load() and pass to extra_presets
@@ -37,21 +36,10 @@ def _format_comment_line(s):
 
 def _format_flag(flag, meta):
     command = getattr(meta, "command", "common")
-    commands = _expand_commands(command)
-
-    return "\n".join(["{} {}".format(
+    return "{} {}".format(
         command,
         _format_boolean_flag(flag, meta) if type(meta.default) == "bool" else _format_flag_with_value(flag, meta),
-    ) for command in commands])
-
-def _expand_commands(command):
-    if lt("6.3.0"):
-        if command == "common":
-            return ["build", "fetch", "query"]
-        if command.startswith("common:"):
-            config = command.split(":")[1]
-            return ["build:{}".format(config), "fetch:{}".format(config), "query:{}".format(config)]
-    return [command]
+    )
 
 def _format_flag_with_value(flag, meta):
     return "--{}={}".format(
@@ -136,8 +124,8 @@ generate_preset = rule(
 )
 
 def _bazelrc_preset_impl(name, **kwargs):
-    if lt("6.0.0"):
-        fail("bazelrc_preset requires Bazel 6 or later. You are running Bazel {}".format(version))
+    if lt("7.0.0"):
+        fail("bazelrc_preset requires Bazel 7 or later. You are running Bazel {}".format(version))
 
     generate_preset(
         name = name,
@@ -175,27 +163,16 @@ def bazelrc_preset(name, out_file = None, **kwargs):
         **propagate_common_rule_attributes(kwargs)
     )
 
-    update_target = "//{}:{}.update".format(native.package_name(), name)
-    test_args = ["--missing", out_file, update_target]
-    test_data = []
     if native.glob([out_file], allow_empty = True):
-        diff_target = "{}.update_diff".format(name)
-        hermetic_diff(
-            name = diff_target,
-            old_file = out_file,
-            new_file = name,
+        diff(
+            name = "{}.update_diff".format(name),
+            srcs = [out_file, name],
+            # Normal format writes an empty patch for equal files. diff.bzl's
+            # unified format emits a newline for equal files.
+            args = ["--normal"],
+            validate = 1,
             **propagate_common_rule_attributes(kwargs)
         )
-        test_args = ["--compare", "$(rootpath :{})".format(diff_target), update_target]
-        test_data = [":{}".format(diff_target)]
-
-    native_test(
-        name = "{}.update_test".format(name),
-        src = Label("//private:check_preset_diff.sh"),
-        args = test_args,
-        data = test_data,
-        **propagate_common_rule_attributes(kwargs)
-    )
 
 def bazelrc_preset_test(name, **kwargs):
     """

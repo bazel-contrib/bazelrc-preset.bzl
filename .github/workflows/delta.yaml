@@ -13,8 +13,6 @@ jobs:
     strategy:
       matrix:
         bazel_version:
-          - "6.0.0"
-          - "6.x"
           - "7.x"
           - "8.x"
           - "9.*"
@@ -38,7 +36,7 @@ jobs:
         id: new
         run: |
           bazel build tests:preset
-          bazel test tests:hermetic_diff_test
+          bazel build --output_groups=_validation tests:preset_diff_fixture
           cat bazel-bin/tests/_preset.bazelrc | tee /tmp/new
           # Avoid problems with later bazel calls under --lockfile_mode=error
           git restore MODULE.bazel.lock

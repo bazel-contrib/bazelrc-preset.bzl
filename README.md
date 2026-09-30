@@ -20,6 +20,8 @@ Read [the Bazel bazelrc documentation](https://bazel.build/run/bazelrc).
 
 ## Install
 
+Requires Bazel 7 or later.
+
 1. Add `bazelrc-preset.bzl` to your `MODULE.bazel` file.
     ```starlark
     bazel_dep(name = "bazelrc-preset.bzl", version = "...")
@@ -37,7 +39,8 @@ Read [the Bazel bazelrc documentation](https://bazel.build/run/bazelrc).
 
 3. Create the preset by running `bazel run //tools:preset.update`.
 Note that you don't need to remember the command.
-A test target `preset.update_test` is also created, which prints the command if the file is missing or has outdated contents.
+Once the file exists, `bazel build --output_groups=_validation //tools:preset.update_diff`
+checks that it matches the generated preset. Run the update command again if validation fails.
 
 4. Import it into your project's `/.bazelrc` file.
 We suggest you add it at the top, so that project-specific flags may override values.

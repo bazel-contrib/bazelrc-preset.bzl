@@ -1,4 +1,4 @@
-# Used only under Bazel 6 or earlier
+# Legacy WORKSPACE setup for consumers using non-Bzlmod builds.
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(

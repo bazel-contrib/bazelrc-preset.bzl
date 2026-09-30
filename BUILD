@@ -20,13 +20,12 @@ bzl_library(
     srcs = ["bazelrc-preset.bzl"],
     deps = [
         ":flags",
-        "//private:diff",
         "@bazel_features_version//:version",
         "@bazel_lib//lib:testing",
         "@bazel_lib//lib:utils",
         "@bazel_lib//lib:write_source_files",
         "@bazel_skylib//lib:new_sets",
-        "@bazel_skylib//rules:native_binary",
+        "@diff.bzl//diff:defs",
     ],
 )
 
