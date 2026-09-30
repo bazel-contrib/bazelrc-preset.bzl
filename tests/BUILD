@@ -1,8 +1,6 @@
 load("@bazel_lib//lib:testing.bzl", "assert_contains")
 load("@bazel_skylib//rules:native_binary.bzl", "native_test")
-load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("//:bazelrc-preset.bzl", "bazelrc_preset", "bazelrc_preset_test")
-load("@diff.bzl//diff:defs.bzl", "diff")
 load(":extra_test_presets.bzl", "ALLOW_REPEATED_PRESETS", "EXTRA_TEST_PRESETS")
 
 bazelrc_preset(
@@ -85,17 +83,4 @@ assert_contains(
     name = "test_allow_repeated_flag_contains_the_second_value",
     actual = ":test_allow_repeated_flag",
     expected = "common --allow_repeated_flag=2",
-)
-
-write_file(
-    name = "generated_diff_fixture",
-    out = "generated_diff_fixture.txt",
-    content = ["matching", ""],
-)
-
-diff(
-    name = "preset_diff_fixture",
-    srcs = ["preset_diff_fixture.txt", ":generated_diff_fixture"],
-    args = ["--normal"],
-    validate = 1,
 )

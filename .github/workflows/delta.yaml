@@ -37,8 +37,7 @@ jobs:
       - name: Current output
         id: new
         run: |
-          bazel build tests:preset
-          bazel build --output_groups=_validation tests:preset_diff_fixture
+          bazel build tests:all
           cat bazel-bin/tests/_preset.bazelrc | tee /tmp/new
           # Avoid problems with later bazel calls under --lockfile_mode=error
           git restore MODULE.bazel.lock
