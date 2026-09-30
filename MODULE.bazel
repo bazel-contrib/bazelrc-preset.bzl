@@ -3,6 +3,11 @@ module(name = "bazelrc-preset.bzl")
 # Lower-bound of dependency versions
 bazel_dep(name = "bazel_lib", version = "3.0.0")
 bazel_dep(name = "diff.bzl", version = "0.5.8")
+single_version_override(
+    module_name = "diff.bzl",
+    patches = ["//:diff_bzl_visibility.patch"],
+    patch_strip = 1,
+)
 bazel_dep(name = "bazel_features", version = "1.0.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.1")
 

@@ -36,10 +36,21 @@ def _format_comment_line(s):
 
 def _format_flag(flag, meta):
     command = getattr(meta, "command", "common")
-    return "{} {}".format(
+    commands = _expand_commands(command)
+
+    return "\n".join(["{} {}".format(
         command,
         _format_boolean_flag(flag, meta) if type(meta.default) == "bool" else _format_flag_with_value(flag, meta),
-    )
+    ) for command in commands])
+
+def _expand_commands(command):
+    if lt("6.3.0"):
+        if command == "common":
+            return ["build", "fetch", "query"]
+        if command.startswith("common:"):
+            config = command.split(":")[1]
+            return ["build:{}".format(config), "fetch:{}".format(config), "query:{}".format(config)]
+    return [command]
 
 def _format_flag_with_value(flag, meta):
     return "--{}={}".format(
@@ -124,8 +135,8 @@ generate_preset = rule(
 )
 
 def _bazelrc_preset_impl(name, **kwargs):
-    if lt("7.0.0"):
-        fail("bazelrc_preset requires Bazel 7 or later. You are running Bazel {}".format(version))
+    if lt("6.0.0"):
+        fail("bazelrc_preset requires Bazel 6 or later. You are running Bazel {}".format(version))
 
     generate_preset(
         name = name,

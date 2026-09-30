@@ -20,7 +20,7 @@ Read [the Bazel bazelrc documentation](https://bazel.build/run/bazelrc).
 
 ## Install
 
-Requires Bazel 7 or later.
+Requires Bazel 6 or later.
 
 1. Add `bazelrc-preset.bzl` to your `MODULE.bazel` file.
     ```starlark

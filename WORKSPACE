@@ -1,4 +1,4 @@
-# Legacy WORKSPACE setup for consumers using non-Bzlmod builds.
+# Used only under Bazel 6 or earlier
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
@@ -44,6 +44,8 @@ http_archive(
     sha256 = "c9d44bc578563d0489f5d45a41515648dc870ffdf2eac7401f7372e637121513",
     strip_prefix = "diff.bzl-0.5.8",
     url = "https://github.com/kormide/diff.bzl/releases/download/v0.5.8/diff.bzl-v0.5.8.tar.gz",
+    patches = ["//:diff_bzl_visibility.patch"],
+    patch_args = ["-p1"],
 )
 
 load("@diff.bzl//diff:repositories.bzl", "diffutils_register_toolchains")
