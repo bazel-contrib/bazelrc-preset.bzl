@@ -1,0 +1,10 @@
+diff --git a/diff/BUILD.bazel b/diff/BUILD.bazel
+--- a/diff/BUILD.bazel
++++ b/diff/BUILD.bazel
+@@ -24,5 +24,5 @@ diff_options(
+         ":validate.enabled": True,
+         "//conditions:default": False,
+     }),
+-    visibility = ["//diff:__subpackages__"],
++    visibility = ["//visibility:public"],
+ )

@@ -21,6 +21,7 @@ load("@bazel_lib//lib:testing.bzl", "assert_outputs")
 load("@bazel_lib//lib:utils.bzl", "propagate_common_rule_attributes")
 load("@bazel_lib//lib:write_source_files.bzl", "write_source_file")
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
+load("@diff.bzl//diff:defs.bzl", "diff")
 load("//:flags.bzl", "FLAGS", "MIGRATIONS", _non_rbe = "NON_RBE")
 load("//private:util.bzl", "lt")
 
@@ -168,10 +169,21 @@ def bazelrc_preset(name, out_file = None, **kwargs):
         name = "{}.update".format(name),
         out_file = out_file,
         in_file = name,
-        diff_test_failure_message = "The bazelrc preset has changed. Run 'bazel run {{TARGET}}' to update it.",
-        file_missing_failure_message = "File %s is missing. Run 'bazel run {{TARGET}}' to create it." % out_file,
+        # bazel-lib's generated test calls diff from PATH, which is not guaranteed on CI workers.
+        diff_test = False,
         **propagate_common_rule_attributes(kwargs)
     )
+
+    if native.glob([out_file], allow_empty = True):
+        diff(
+            name = "{}.update_diff".format(name),
+            srcs = [out_file, name],
+            # Normal format writes an empty patch for equal files. diff.bzl's
+            # unified format emits a newline for equal files.
+            args = ["--normal"],
+            validate = 1,
+            **propagate_common_rule_attributes(kwargs)
+        )
 
 def bazelrc_preset_test(name, **kwargs):
     """

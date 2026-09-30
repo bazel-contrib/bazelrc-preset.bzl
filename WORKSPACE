@@ -33,6 +33,29 @@ load("@bazel_lib//lib:repositories.bzl", "bazel_lib_dependencies")
 bazel_lib_dependencies()
 
 http_archive(
+    name = "package_metadata",
+    integrity = "sha256-W9DMdZTqUo/Sj5jYJFfxV4J9SMwg4HvP27VgcvNcj2c=",
+    strip_prefix = "supply-chain-0.0.6/metadata",
+    url = "https://github.com/bazel-contrib/supply-chain/releases/download/v0.0.6/supply-chain-v0.0.6.tar.gz",
+)
+
+http_archive(
+    name = "diff.bzl",
+    sha256 = "c9d44bc578563d0489f5d45a41515648dc870ffdf2eac7401f7372e637121513",
+    strip_prefix = "diff.bzl-0.5.8",
+    url = "https://github.com/kormide/diff.bzl/releases/download/v0.5.8/diff.bzl-v0.5.8.tar.gz",
+    patches = ["//:diff_bzl_visibility.patch"],
+    patch_args = ["-p1"],
+)
+
+load("@diff.bzl//diff:repositories.bzl", "diffutils_register_toolchains")
+
+diffutils_register_toolchains(
+    name = "diffutils",
+    diffutils_version = "3.12",
+)
+
+http_archive(
     name = "bazel_features",
     sha256 = "07bd2b18764cdee1e0d6ff42c9c0a6111ffcbd0c17f0de38e7f44f1519d1c0cd",
     strip_prefix = "bazel_features-1.32.0",
