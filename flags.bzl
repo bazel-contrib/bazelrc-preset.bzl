@@ -429,6 +429,15 @@ FLAGS = {
 # Based on https://github.com/bazelbuild/bazel/issues?q=is%3Aissue%20state%3Aopen%20label%3Amigration-ready
 # buildifier: keep-sorted
 MIGRATIONS = {
+    "experimental_split_coverage_postprocessing": struct(
+        default = True,
+        if_bazel_version = ge_same_major("9.0.0"),
+        description = """\
+        Run test coverage postprocessing in a separate action to support coverage with remote execution.
+
+        Flipped to true in Bazel 10.
+        """,
+    ),
     "incompatible_auto_exec_groups": struct(
         default = True,
         if_bazel_version = ge_same_major("8.0.0"),
@@ -450,6 +459,18 @@ MIGRATIONS = {
         This requires adding load statements to all bzl and BUILD files that are using those rules.
 
         See https://github.com/bazelbuild/bazel/issues/23043
+        """,
+    ),
+    "incompatible_check_testonly_for_output_files": struct(
+        default = True,
+        if_bazel_version = ge_same_major("9.0.0"),
+        description = """\
+        Check the testonly attribute of the generating rule when depending on an output file.
+        Non-test targets must not depend on outputs of testonly rules.
+
+        See https://github.com/bazelbuild/bazel/issues/28875
+
+        Flipped to true in Bazel 10.
         """,
     ),
     "incompatible_config_setting_private_default_visibility": struct(
@@ -493,6 +514,18 @@ MIGRATIONS = {
         See https://github.com/bazelbuild/bazel/issues/17032
         """,
     ),
+    "incompatible_exclude_starlark_flags_from_exec_config": struct(
+        default = True,
+        if_bazel_version = ge_same_major("9.0.0"),
+        description = """\
+        Do not propagate Starlark flags to execution configurations by default.
+        Use --experimental_propagate_custom_flag for flags that execution tools need.
+
+        See https://github.com/bazelbuild/bazel/issues/26909
+
+        Flipped to true in Bazel 10.
+        """,
+    ),
     "incompatible_exclusive_test_sandboxed": struct(
         default = True,
         if_bazel_version = ge_same_major("6.0.0"),
@@ -501,6 +534,18 @@ MIGRATIONS = {
          Fixes a bug where Bazel doesn't enable sandboxing for tests with `tags=["exclusive"]`.
 
         See https://github.com/bazelbuild/bazel/issues/16871
+        """,
+    ),
+    "incompatible_no_implicit_file_export": struct(
+        default = True,
+        if_bazel_version = ge_same_major("9.0.0"),
+        description = """\
+        Keep source files private unless explicitly exported with exports_files.
+        Add exports_files declarations for source files used from other packages.
+
+        See https://github.com/bazelbuild/bazel/issues/10225
+
+        Flipped to true in Bazel 10.
         """,
     ),
     "incompatible_repo_env_ignores_action_env": struct(
@@ -515,6 +560,18 @@ MIGRATIONS = {
         - And possibly more.
 
         See https://github.com/bazelbuild/bazel/issues/26222
+        """,
+    ),
+    "rewind_lost_inputs": struct(
+        default = True,
+        if_bazel_version = ge_same_major("9.0.0"),
+        description = """\
+        Recover from remote or disk cache eviction by rerunning actions that generated lost inputs.
+        This lets builds using Build without the Bytes recover within a single invocation.
+
+        See https://github.com/bazelbuild/bazel/issues/30415
+
+        Flipped to true in Bazel 10.
         """,
     ),
 }
